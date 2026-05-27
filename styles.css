@@ -1,0 +1,306 @@
+/* 
+ * 科技射击游戏 - Babylon.js 版本样式
+ */
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', 'Orbitron', 'Courier New', monospace;
+    user-select: none;
+}
+
+/* 渲染画布 */
+#renderCanvas {
+    width: 100%;
+    height: 100vh;
+    display: block;
+    outline: none;
+    touch-action: none;
+}
+
+/* 科技感 UI 叠加层 */
+.ui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* 顶部状态栏 - 全息风格 */
+.hud-top {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    pointer-events: none;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+    font-weight: bold;
+}
+
+.stat-panel {
+    background: rgba(0, 5, 15, 0.65);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 8px 18px;
+    border-left: 3px solid #0ff;
+    border-right: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+    letter-spacing: 1px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #8af;
+    letter-spacing: 2px;
+}
+
+.stat-value {
+    font-size: 24px;
+    color: #0ff;
+    font-family: 'Orbitron', monospace;
+    line-height: 1;
+}
+
+.ammo-panel {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 8px 24px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid rgba(0, 255, 255, 0.6);
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.3);
+}
+
+.ammo-current {
+    font-size: 42px;
+    font-weight: 800;
+    color: #ffaa44;
+    text-shadow: 0 0 10px #ff6600;
+    line-height: 1;
+}
+
+.ammo-max {
+    font-size: 18px;
+    color: #9cf;
+}
+
+/* 准星 - 科技动态瞄准 */
+.crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.crosshair::before, .crosshair::after {
+    content: '';
+    position: absolute;
+    background: #0ff;
+    box-shadow: 0 0 6px #0ff, 0 0 12px #0af;
+}
+
+.crosshair::before {
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 12px;
+    transform: translateX(-50%);
+}
+
+.crosshair::after {
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    height: 12px;
+    transform: translateX(-50%);
+}
+
+.crosshair .dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: #f0f;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px #f0f;
+}
+
+.crosshair .hline {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #0ff;
+    transform: translateY(-50%);
+    box-shadow: 0 0 6px #0ff;
+}
+
+/* 武器切换提示 */
+.weapon-info {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    padding: 12px 20px;
+    border-radius: 16px;
+    border-right: 3px solid #0ff;
+    border-bottom: 1px solid #0ff;
+    text-align: right;
+    pointer-events: none;
+    font-family: 'Orbitron', monospace;
+}
+
+.weapon-name {
+    font-size: 18px;
+    color: #cfc;
+    letter-spacing: 2px;
+}
+
+.weapon-stats {
+    font-size: 12px;
+    color: #8af;
+}
+
+/* 击杀提示区域 */
+.kill-feed {
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    width: 240px;
+    pointer-events: none;
+    text-align: right;
+    z-index: 15;
+}
+
+.kill-entry {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    border-left: 4px solid #ff3366;
+    padding: 5px 12px;
+    margin-bottom: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    animation: fadeOut 2s forwards;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; transform: translateX(0);}
+    70% { opacity: 0.8; }
+    100% { opacity: 0; transform: translateX(30px); display: none; visibility: hidden;}
+}
+
+/* 伤害指示器 */
+.damage-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,0,0,0) 60%, rgba(255,0,0,0.25) 100%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+    z-index: 5;
+}
+
+/* 游戏结束画面 */
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    pointer-events: auto;
+    flex-direction: column;
+    font-family: 'Orbitron', monospace;
+    transition: all 0.3s;
+}
+
+.game-overlay h1 {
+    font-size: 48px;
+    color: #0ff;
+    text-shadow: 0 0 20px #0ff;
+    margin-bottom: 20px;
+}
+
+.game-overlay button {
+    background: linear-gradient(45deg, #0a2a3a, #001a2a);
+    border: 2px solid #0ff;
+    color: #0ff;
+    font-size: 24px;
+    padding: 12px 32px;
+    cursor: pointer;
+    font-family: 'Orbitron', monospace;
+    transition: 0.2s;
+    margin-top: 30px;
+    border-radius: 40px;
+    letter-spacing: 2px;
+}
+
+.game-overlay button:hover {
+    background: #0ff;
+    color: #000;
+    box-shadow: 0 0 25px #0ff;
+}
+
+.hidden {
+    display: none;
+}
+
+.health-bar-bg {
+    position: absolute;
+    bottom: 40px;
+    left: 30px;
+    width: 280px;
+    height: 12px;
+    background: #330000;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #f44;
+    box-shadow: 0 0 10px rgba(255,0,0,0.4);
+}
+
+.health-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #ff3366, #ff8844);
+    transition: width 0.2s;
+    border-radius: 6px;
+}
+
+.health-text {
+    position: absolute;
+    bottom: 55px;
+    left: 30px;
+    font-size: 12px;
+    color: #faa;
+    text-shadow: 0 0 5px red;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; text-shadow: 0 0 2px cyan;}
+    100% { opacity: 1; text-shadow: 0 0 12px cyan;}
+}
